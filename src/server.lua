@@ -4,11 +4,13 @@ require("lib/lube")
 clients = {}
 
 function onConnect(id)
-  clients[id] = true
+  clients[id] = {}
   print("Connection: " .. tostring(id))
 end
 function onReceive(data, id)
-  print(data .. " received from " .. tostring(id))
+  key, isRepeat = data:match("^(%S*) (%S*)")
+  print(key)
+  server:send(data, id)
 end
 function onDisconnect(id)
   clients[id] = nil
