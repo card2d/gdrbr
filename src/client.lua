@@ -4,7 +4,7 @@ require("lib/lube")
 function onConnect()
   
 end
-function onReceive(data)
+function onReceive(data) 
   key, isRepeat = data:match("^(%S*) (%S*)")
   print(key)
 end
@@ -12,7 +12,11 @@ function onDisconnect()
  
 end
 function love.keypressed(key, isRepeat)
-  client:send(key .. " " .. tostring(isRepeat))
+  if key == "e" then
+    client:send("endturn e")
+  elseif key == "t" then
+    client:send("target t")
+  end
 end
 
 client = lube:tcpClient()

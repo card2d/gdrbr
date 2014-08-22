@@ -3,14 +3,20 @@ require("lib/lube")
 
 clients = {}
 
+commands = {target = function(param, id) print("target " .. param) end,
+            endturn = function(param, id) print("endturn " .. param) end} 
+
 function onConnect(id)
   clients[id] = {}
   print("Connection: " .. tostring(id))
 end
 function onReceive(data, id)
-  key, isRepeat = data:match("^(%S*) (%S*)")
-  print(key)
-  server:send(data, id)
+  command, param = data:match("^(%S*) (%S*)")
+  if commands[command] then
+    commands[command](param, id)
+  else
+    print("Unknown command: \"" .. command .. '"')
+  end
 end
 function onDisconnect(id)
   clients[id] = nil
